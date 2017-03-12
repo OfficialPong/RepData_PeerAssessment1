@@ -45,8 +45,10 @@ plot(meanDaily$interval,meanDaily$mean_steps,type="l",main="Average Daily Patter
 ```r
 #get the interval with max number of steps
 maxstepinterval<-subset(meanDaily,meanDaily$mean_steps==max(meanDaily$mean_steps))$interval
+maxstep<-subset(meanDaily,meanDaily$mean_steps==max(meanDaily$mean_steps))$mean_steps
 ```
-The interval with maximum number of steps is 835
+The interval with maximum number of steps is 835  
+The associated max. number of steps is 206.1698113
 
 
 ## Imputing missing values
