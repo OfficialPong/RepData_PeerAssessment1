@@ -49,7 +49,7 @@ maxstepinterval<-subset(meanDaily,meanDaily$mean_steps==max(meanDaily$mean_steps
 The interval with maximum number of steps is 835
 
 
-## Inputing missing values
+## Imputing missing values
 
 ```r
 #count number of NA records
@@ -57,6 +57,7 @@ numNa<-sum(is.na(data$steps))
 ```
 The number of NA records in the data is 2304
 
+The strategy I'll use to impute missing values is to replace the NA step entries with the mean value for that time interval as calculated when analysing the dataset in the absence of NA values. The code for doing so is shown below:
 
 ```r
 dataPrime<-data #copy data

@@ -152,11 +152,12 @@ plot(meanDaily$interval,meanDaily$mean_steps,type=&quot;l&quot;,main=&quot;Avera
 maxstepinterval&lt;-subset(meanDaily,meanDaily$mean_steps==max(meanDaily$mean_steps))$interval</code></pre>
 <p>The interval with maximum number of steps is 835</p>
 </div>
-<div id="inputing-missing-values" class="section level2">
-<h2>Inputing missing values</h2>
+<div id="imputing-missing-values" class="section level2">
+<h2>Imputing missing values</h2>
 <pre class="r"><code>#count number of NA records
 numNa&lt;-sum(is.na(data$steps))</code></pre>
 <p>The number of NA records in the data is 2304</p>
+<p>The strategy I’ll use to impute missing values is to replace the NA step entries with the mean value for that time interval as calculated when analysing the dataset in the absence of NA values. The code for doing so is shown below:</p>
 <pre class="r"><code>dataPrime&lt;-data #copy data
 naIndices&lt;-with(dataPrime,is.na(dataPrime$steps)) #get all NA indices
 for (i in 1:length(naIndices))
