@@ -1,17 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
-```{r setoptions,echo=FALSE}
-library(knitr)
-#set path for figures
-knitr::opts_chunk$set(fig.path='figure/')
-```
+# Reproducible Research: Peer Assessment 1
+
 
 ## Loading and preprocessing the data
-```{r loadData}
+
+```r
 #load the data
 data<-read.csv(unz("activity.zip","activity.csv"))
 #sum steps, grouping by day 
@@ -19,40 +11,54 @@ sumSteps<-aggregate(data$steps,by=list(data$date),FUN=sum)
 ```
 
 ## What is mean total number of steps taken per day?
-```{r meanMedian}
+
+```r
 #plot a histogram showing frequency of number of steps
 hist(sumSteps$x,xlab="Number of Steps",main="Histogram of Daily Total Steps")
+```
+
+![](figure/meanMedian-1.png)<!-- -->
+
+```r
 #calculate mean in the summed steps data
 myMean<-mean(sumSteps$x,na.rm=TRUE)
 #calculate median in the summed steps data
 myMedian<-median(sumSteps$x,na.rm=TRUE)
 ```
-The **mean** total daily steps is `r format(round(myMean,digits=2))`  
-The **median** total daily steps is `r myMedian`
+The **mean** total daily steps is 10766.19  
+The **median** total daily steps is 10765
 
 
 ## What is the average daily activity pattern?
-```{r meanDaily}
+
+```r
 #calculate the mean number of steps for each interval
 meanDaily<-aggregate(data$steps,by=list(data$interval),FUN=mean, na.rm=TRUE)
 #set column names of this table
 colnames(meanDaily)<-c("interval","mean_steps")
 #plot average daily pattern
 plot(meanDaily$interval,meanDaily$mean_steps,type="l",main="Average Daily Pattern",xlab="interval",ylab="average steps")
+```
+
+![](figure/meanDaily-1.png)<!-- -->
+
+```r
 #get the interval with max number of steps
 maxstepinterval<-subset(meanDaily,meanDaily$mean_steps==max(meanDaily$mean_steps))$interval
 ```
-The interval with maximum number of steps is `r maxstepinterval`
+The interval with maximum number of steps is 835
 
 
 ## Inputing missing values
-```{r numberOfNa}
+
+```r
 #count number of NA records
 numNa<-sum(is.na(data$steps))
 ```
-The number of NA records in the data is `r numNa`
+The number of NA records in the data is 2304
 
-```{r replaceNa}
+
+```r
 dataPrime<-data #copy data
 naIndices<-with(dataPrime,is.na(dataPrime$steps)) #get all NA indices
 for (i in 1:length(naIndices))
@@ -71,20 +77,24 @@ sumStepsPrime<-aggregate(dataPrime$steps,by=list(dataPrime$date),FUN=sum)
 hist(sumStepsPrime$x,xlab="Number of Steps",main="Histogram of Daily Total Steps")
 ```
 
-```{r meanMedianPrime}
+![](figure/replaceNa-1.png)<!-- -->
+
+
+```r
 #get mean of data set with injected values for NA
 myMeanPrime<-mean(sumStepsPrime$x,na.rm=TRUE)
 #get median of data set with injected values for NA
 myMedianPrime<-median(sumStepsPrime$x,na.rm=TRUE)
 ```
-The **mean** total daily steps of patched data set is `r format(round(myMeanPrime,digits=2))`.  
-Compare this to the **mean** of total daily steps of non-patched data set: `r format(round(myMean,digits=2))`  
+The **mean** total daily steps of patched data set is 10766.19.  
+Compare this to the **mean** of total daily steps of non-patched data set: 10766.19  
   
-The **median** total daily steps of patched data set is `r format(round(myMedianPrime,digits=2))`  
-Compare this to **median** of total daily steps of non-patched data set: `r format(round(myMedian,digits=2))`  
+The **median** total daily steps of patched data set is 10766.19  
+Compare this to **median** of total daily steps of non-patched data set: 10765  
  
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r weekdayAnalysis}
+
+```r
 #get the weekday of each date in a vector
 weekdayValues<-weekdays(as.Date(dataPrime$date),abbrev=TRUE)
 #create new column for dataPrime that indicates whether it's a weekend or weekday as a factor
@@ -100,3 +110,5 @@ library(lattice)
 myPlot<-xyplot(mean_steps~interval|category, meanDailyPrime, main="Average Activity Pattern", ylab="Average Daily Steps", xlab="Interval", type="l")
 update(myPlot,layout=c(1,2))
 ```
+
+![](figure/weekdayAnalysis-1.png)<!-- -->
